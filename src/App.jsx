@@ -1,6 +1,7 @@
 import { useState } from "react";
 import InstructionTable from "./components/InstructionTable";
 import LanguageDropdown from "./components/LanguageDropdown";
+import SpeechRecognitionComponent from "./components/SpeechRecognitionComponent";
 
 function App() {
   const [isTableShown,setTableShown] = useState(true)
@@ -32,7 +33,7 @@ function App() {
           <LanguageDropdown />
         </div>
         <InstructionTable isTableShown={isTableShown} />
-        
+        <SpeechRecognitionComponent />
       </section>
     </div>
   );

@@ -10,7 +10,7 @@ import nuybi from '@mathIcons/nuybi.svg';
 import siro from '@mathIcons/siro.svg';
 import dungaga from '@mathIcons/dungaga.svg';
 import bawasi from '@mathIcons/bawasi.svg';
-import itayms from '@mathIcons/itayms.svg';
+import padaghani from '@mathIcons/padaghani.svg';
 import tungaa from '@mathIcons/tungaa.svg';
 import abriha from '@mathIcons/abriha.svg';
 import sirado from '@mathIcons/sirado.svg';
@@ -41,7 +41,7 @@ export default function instructionImages() {
     siro,
     dungaga,
     bawasi,
-    itayms,
+    padaghani,
     tungaa,
     abriha,
     sirado,

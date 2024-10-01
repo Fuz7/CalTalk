@@ -14,10 +14,10 @@ export default function InstructionTable({isTableShown}) {
       [
       'otso',
       'nuybi',
-      'sero',
+      'siro',
       'dungaga',
       'bawasi',
-      'itayms',
+      'padaghani',
       'tungaa/bahini'],
       [
       'abriha/abrihi',

@@ -2,40 +2,52 @@ import { useEffect, useRef, useState } from 'react';
 import microphone from '@assets/microphone.svg';
 
 function SpeechRecognitionComponent() {
-  const recognitionRef = useRef(null); // Ref to hold the SpeechRecognition instance
   const [isListening, setIsListening] = useState(false); // State to track if speech recognition is active
   const [equation, setEquation] = useState(''); // State to hold the equation
-  const [result,setResult] = useState(null)
+  const [result, setResult] = useState(null);
   const silenceTimeoutRef = useRef(null); // Ref to hold the silence timeout
   const listenersAdded = useRef(false); // Ref to track if listeners have been added
 
-  const TextStatus = ()=>{
-    if(result ===null && equation === '' && isListening === false){
-      return('Start Recording, and it will recognize your speech!')
-    }else if(equation === '' && isListening === true){
-      return(<> Say something
-      <span className='absolute right-[-20px] bottom-0 blinking
-        w-[14px] h-[32px] bg-[#664229] rounded-[1px]'></span>
-        </>
-      )
-    }else if(equation !== '' && isListening === true){
-      return(
-      <>{equation}
-      <span className='absolute right-[-20px] bottom-0 blinking
-        w-[14px] h-[32px] bg-[#664229] rounded-[1px]'></span>
+  const calculateString = (stringEquation) => {
       
-      </>)
-    }else if(equation !== '' && isListening === false){
-      return(
-      <>({equation}){`->`} Pausing...
-      <span className='absolute right-[-20px] bottom-0 
-        w-[14px] h-[32px] bg-[#664229] rounded-[1px]'></span>
-      
-      </>
-      )
-    }
-    
   }
+
+  const TextStatus = () => {
+    if (result === null && equation === '' && isListening === false) {
+      return 'Start Recording, and it will recognize your speech!';
+    } else if (equation === '' && isListening === true) {
+      return (
+        <>
+          {' '}
+          Say something
+          <span
+            className="absolute right-[-20px] bottom-0 blinking
+        w-[14px] h-[32px] bg-[#664229] rounded-[1px]"
+          ></span>
+        </>
+      );
+    } else if (equation !== '' && isListening === true) {
+      return (
+        <>
+          {equation}
+          <span
+            className="absolute right-[-20px] bottom-0 blinking
+        w-[14px] h-[32px] bg-[#664229] rounded-[1px]"
+          ></span>
+        </>
+      );
+    } else if (equation !== '' && isListening === false) {
+      return (
+        <>
+          ({equation}){`->`} Pausing...
+          <span
+            className="absolute right-[-20px] bottom-0 
+        w-[14px] h-[32px] bg-[#664229] rounded-[1px]"
+          ></span>
+        </>
+      );
+    }
+  };
 
   useEffect(() => {
     // Check for SpeechRecognition support
@@ -43,49 +55,44 @@ function SpeechRecognitionComponent() {
       window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (window.SpeechRecognition) {
-      
       const recognition = new window.SpeechRecognition();
-      recognitionRef.current = recognition; // Store in ref for access later
       recognition.interimResults = true;
       recognition.maxAlternatives = 1;
 
       const handleResult = (e) => {
         const languageDetector = {
-          Bisaya:{
-            uno:'1',
-            dos:'2',
-            tres:'3',
-            kwatro:'4',
-            quatro:'4',
-            singko:'5',
-            sais:'6',
-            syete:'7',
-            otso:'8',
-            nuybi:'9',
-            dungaga:'+',
-            bawasi:'-',
-            padaghani:'*',
-            tungaa:'/',
-            abriha:'(',
-            sirado:')',
-            pie:'𝜋',
-            human:'human',
-            isaka:'^',
-            'mas dako':'>',
-            'mas gamay':'<',
-            'dako o pareha':'>=',
-            'gamay o pareha':'<=',
-            permutasyon:'!',
-            combayni:'C',
-            tangali:'del',
-            erisa:'clear',
-            'undangi na':'end'
+          Bisaya: {
+            uno: '1',
+            dos: '2',
+            tres: '3',
+            kwatro: '4',
+            quatro: '4',
+            singko: '5',
+            sais: '6',
+            syete: '7',
+            otso: '8',
+            nuybi: '9',
+            dungaga: '+',
+            bawasi: '-',
+            padaghani: '*',
+            tungaa: '/',
+            abriha: '(',
+            sirado: ')',
+            pie: '𝜋',
+            human: 'human',
+            isaka: '^',
+            'mas dako': '>',
+            'mas gamay': '<',
+            'dako o pareha': '>=',
+            'gamay o pareha': '<=',
+            permutasyon: '!',
+            combayni: 'C',
+            tangali: 'del',
+            erisa: 'clear',
+            'undangi na': 'end',
+          },
+        };
 
-
-            
-          }
-        }
-    
         const transcript = Array.from(e.results)
           .map((result) => result[0])
           .map((result) => result.transcript)
@@ -94,30 +101,43 @@ function SpeechRecognitionComponent() {
         const sortedKeys = Object.keys(languageDetector['Bisaya']).sort(
           (a, b) => b.length - a.length,
         );
-        let bago = transcript;
+        let voiceOutput = transcript;
 
         // Replace phrases with their corresponding values from the dictionary
         sortedKeys.forEach((key) => {
           const regex = new RegExp(`\\b${key}\\b`, 'g');
-          bago = bago.replace(regex, languageDetector['Bisaya'][key]);
+          voiceOutput = voiceOutput.replace(regex, languageDetector['Bisaya'][key]);
         });
 
-        console.log('Value: ' + bago);
+        console.log('Value: ' + voiceOutput);
 
         // Clear previous timeout and set a new one for silence
         clearTimeout(silenceTimeoutRef.current);
         silenceTimeoutRef.current = setTimeout(() => {
-          const lastChar = equation.charAt(equation.length - 1)
-          // Checks if last char is numeric and new recorded is numeric 
-
-          if(!isNaN(lastChar) && lastChar !== ' ' && !isNaN(bago)){
-            setEquation((equation) + bago)
-          }else if(isNaN(bago)){
-            setEquation(equation + ' ' + bago)
-          }else if(isNaN(lastChar) &&lastChar !== ' ' && !isNaN(bago)){
-            setEquation(equation + ' ' + bago)
+          const lastChar = equation.charAt(equation.length - 1);
+          // Checks if last char is numeric and new recorded is numeric
+          if(voiceOutput ==='end'){
+            calculateString(equation)
           }
-         
+          else if (voiceOutput === 'clear' && equation !== '') {
+            const wordsArray = equation.split(' ');
+            const removedLastword = wordsArray
+              .slice(0, wordsArray.length - 1)
+              .join(' ');
+            setEquation(removedLastword);
+          } else if (voiceOutput === 'dell' && equation !== '') {
+            const lettersArray = equation.split('');
+            const removedLastLetter = lettersArray
+              .slice(0, lettersArray.length - 1)
+              .join('');
+            setEquation(removedLastLetter);
+          } else if (!isNaN(lastChar) && lastChar !== ' ' && !isNaN(voiceOutput)) {
+            setEquation(equation + voiceOutput);
+          } else if (isNaN(voiceOutput)) {
+            setEquation(equation + ' ' + voiceOutput);
+          } else if (isNaN(lastChar) && lastChar !== ' ' && !isNaN(voiceOutput)) {
+            setEquation(equation + ' ' + voiceOutput);
+          }
         }, 800); // 2 seconds of silence
       };
 
@@ -156,10 +176,9 @@ function SpeechRecognitionComponent() {
     } else {
       console.log('Speech recognition not supported in this browser.');
     }
-  }, [isListening,equation]);
+  }, [isListening, equation]);
 
   const toggleListening = () => {
-    const recognition = recognitionRef.current;
     if (isListening) {
       console.log('Stopping speech recognition...');
       console.log('Current equation:', equation);
@@ -203,8 +222,10 @@ function SpeechRecognitionComponent() {
       border-[3px] border-solid border-[#664229] min-h-[80px]
       self-center mt-[24px] flex justify-center items-center px-[100px] "
       >
-        <p className="font-Inter text-[24px] text-[#434343]
-        relative">
+        <p
+          className="font-Inter text-[24px] text-[#434343]
+        relative"
+        >
           <TextStatus />
         </p>
       </div>

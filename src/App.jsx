@@ -2,8 +2,9 @@ import { useState } from 'react';
 import InstructionTable from './components/InstructionTable';
 import LanguageDropdown from './components/LanguageDropdown';
 import SpeechRecognitionComponent from './components/SpeechRecognitionComponent';
-
+import Decorations from './components/Decorations';
 function App() {
+  
   const [isTableShown, setTableShown] = useState(true);
   const [language, setLanguage] = useState('English');
   const availableLanguages = ['English', 'Tagalog', 'Bisaya', 'Japanese'];
@@ -13,8 +14,8 @@ function App() {
    justify-center"
     >
       <section
-        className="max-w-[1440px] min-w-[1440px] min-h-lvh 
-     relative flex flex-col"
+        className="max-w-[1440px] min-w-[1440px] min-h-[1000px] 
+     relative flex flex-col overflow-hidden"
       >
         <h1
           className="max-w-[440px] min-w-[440px] min-h-[100px] 
@@ -44,6 +45,7 @@ function App() {
         </div>
         <InstructionTable isTableShown={isTableShown} language={language} />
         <SpeechRecognitionComponent />
+        <Decorations />
       </section>
     </div>
   );

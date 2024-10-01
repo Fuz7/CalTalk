@@ -8,9 +8,9 @@ export default function LanguageDropdown({language,setLanguage,availableLanguage
   useLayoutEffect(() => {
     setBarHeight(isCollapsed ? 66 : 66 + availableLanguages.length * 60);
   }, [isCollapsed, availableLanguages.length]);
-
+  
   return (
-    <div className="relative min-w-[174px] min-h-[66px] bg-transparent">
+    <div className="relative min-w-[174px] min-h-[66px] mr-[3px] bg-transparent">
       <div
         className={`min-w-[174px] min-h-[66px] rounded-[5px]
           bg-white border border-solid border-black

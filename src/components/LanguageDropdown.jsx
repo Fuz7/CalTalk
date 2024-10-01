@@ -16,7 +16,7 @@ export default function LanguageDropdown(){
     <div className='relative min-w-[184px] min-h-[66px] bg-transparent'>
 
     <div className={`min-w-[184px] min-h-[66px]  rounded-[5px]
-    bg-white border border-solid border-[#664229]
+    bg-white border border-solid border-black
     absolute top-0 left-0 transition-[height]
     flex flex-col  cursor-pointer overflow-clip 
     select-none ease-out duration-300

@@ -1,3 +1,4 @@
+import InstructionTable from "./components/InstructionTable";
 import LanguageDropdown from "./components/LanguageDropdown";
 
 function App() {
@@ -13,7 +14,7 @@ function App() {
       >
         <h1
           className="max-w-[440px] min-w-[440px] min-h-[100px] 
-      flex text-white mt-[35px]
+      flex text-white mt-[30px]
       font-Belanosima items-center justify-center bg-[#664229]
       text-[64px] rounded-[20px] self-center
       titleShadow"
@@ -28,6 +29,7 @@ function App() {
           shadow-[0_4px_4px_0px_rgba(0,0,0,0.34)] ">Instructions</button>
           <LanguageDropdown />
         </div>
+        <InstructionTable />
       </section>
     </div>
   );

@@ -7,7 +7,7 @@ function SpeechRecognitionComponent() {
   const [result, setResult] = useState(null);
   const silenceTimeoutRef = useRef(null); // Ref to hold the silence timeout
   const listenersAdded = useRef(false); // Ref to track if listeners have been added
-  
+
   const calculateString = (stringEquation) => {
     try {
       let formattedString = stringEquation.replace(/𝜋/g, '3.14');
@@ -15,26 +15,28 @@ function SpeechRecognitionComponent() {
         /C\((\d+),\s*(\d+)\)/g,
         'combinations($1, $2)',
       );
-      const result = math.evaluate(formattedString);
-      if(formattedString === ''){
-        setResult(null)
-      }else{
-        setResult(result)
+      let result = math.evaluate(formattedString);
+      if (!isNaN(result) && !Number.isInteger(result)) {
+        result = parseFloat(result).toFixed(3);
+      }
+      if (formattedString === '') {
+        setResult(null);
+      } else {
+        setResult(result);
       }
     } catch (error) {
-      setResult('error')
+      setResult('error');
     }
-    setEquation('')
-    setIsListening(false)
+    setEquation('');
+    setIsListening(false);
   };
 
   const TextStatus = () => {
-    if(result === 'error'){
-      return 'Mali ang imohang pagsulat, usabi'
+    if (result === 'error') {
+      return 'Mali ang imohang pagsulat, usabi';
     } else if (result === null && equation === '' && isListening === false) {
       return 'Start Recording, and it will recognize your speech!';
-    }  
-    else if (equation === '' && isListening === true) {
+    } else if (equation === '' && isListening === true) {
       return (
         <>
           {' '}
@@ -45,35 +47,32 @@ function SpeechRecognitionComponent() {
           ></span>
         </>
       );
-    } 
-    else if (equation !== '' && isListening === true) {
+    } else if (equation !== '' && isListening === true) {
       return (
         <>
           {equation}
           <span
             className="absolute right-[-20px] bottom-0 blinking
             w-[14px] h-[32px] bg-[#664229] rounded-[1px]"
-            ></span>
+          ></span>
         </>
       );
-    } 
-    else if (equation !== '' && isListening === false) {
+    } else if (equation !== '' && isListening === false) {
       return (
         <>
           ({equation}){`->`} Pausing...
           <span
             className="absolute right-[-20px] bottom-0 
             w-[14px] h-[32px] bg-[#664229] rounded-[1px]"
-            ></span>
+          ></span>
         </>
       );
-    }
-    else if(!isNaN(result) && result !== false){
-      return 'Output: ' + result
-    }else if(result === true){
-      return 'Tinuod jud na dol'
-    }else if(result === false){
-      return 'Pataka raman ka dol'
+    } else if (!isNaN(result) && result !== false) {
+      return 'Output: ' + result;
+    } else if (result === true) {
+      return 'Tinuod jud na dol';
+    } else if (result === false) {
+      return 'Pataka raman ka dol';
     }
   };
 
@@ -93,36 +92,41 @@ function SpeechRecognitionComponent() {
             uno: '1',
             dos: '2',
             tres: '3',
+            dress:'3',
             kwatro: '4',
             quatro: '4',
             singko: '5',
             sais: '6',
-            size:'6',
+            size: '6',
             syete: '7',
             otso: '8',
             nuybi: '9',
-            navy:'9',
-            maybe:'9',
-            noybe:'9',
+            navy: '9',
+            maybe: '9',
+            noybe: '9',
             zero: '0',
-            siro:'0',
+            siro: '0',
             dungaga: '+',
-            dunga:'+',
-            dong:'+',
-            dongga:'+',
-            dung:'+',
-            umaga:'+',
+            dunga: '+',
+            dumaga:'+',
+            dong: '+',
+            dongga: '+',
+            dung: '+',
+            umaga: '+',
             bawasi: '-',
             padaghani: '*',
-            padagan:'*',
+            padagan: '*',
             panag: '*',
-            padagdag:'*',
-            panagini:'*',
+            panagan: '*',
+            padagdag: '*',
+            panagini: '*',
             tungaa: '/',
-            tunga:'/',
-            'oo nga':'/',
+            tunga: '/',
+            bayani: '/',
+            mainit: '/',
+            'oo nga': '/',
             abria: '(',
-            abri:'(',
+            abri: '(',
             sirado: ')',
             pie: '𝜋',
             human: ',',
@@ -132,21 +136,25 @@ function SpeechRecognitionComponent() {
             'dako o pareha': '>=',
             'gamay o pareha': '<=',
             permutasyon: '!',
-            permutation:'!',
+            permutation: '!',
             combayni: 'C',
             combining: 'C',
 
             tangali: '--',
-            tangalin:'--',
-            'ang galing':'--',
+            tangalin: '--',
+            tanghali: '--',
+            'ang galing': '--',
             erisa: '<-',
             erissa: '<-',
+            elisa: '<-',
+            irisa:'<-',
+            'it is a': '<-',
             'undangi na': '->',
-            'undang ina':'->',
-            'undang in':'->',
+            'undang ina': '->',
+            'undang in': '->',
             undang: '->',
-            'unang ina':'->', 
-            'ang dami na':'->',
+            'unang ina': '->',
+            'ang dami na': '->',
           },
         };
 
@@ -178,6 +186,11 @@ function SpeechRecognitionComponent() {
           // Checks if last char is numeric and new recorded is numeric
           if (voiceOutput === '->') {
             calculateString(equation);
+          } else if (
+            equation === '' &&
+            (voiceOutput === '<-' || voiceOutput === '--')
+          ) {
+            return
           } else if (voiceOutput === '<-' && equation !== '') {
             const wordsArray = equation.split(' ');
             const removedLastword = wordsArray
@@ -199,8 +212,8 @@ function SpeechRecognitionComponent() {
             (!isNaN(voiceOutput) ||
               voiceOutput === '(' ||
               voiceOutput === ',' ||
-              voiceOutput === ')'||
-              voiceOutput === '^'||
+              voiceOutput === ')' ||
+              voiceOutput === '^' ||
               voiceOutput === '!')
           ) {
             setEquation(equation + voiceOutput);
@@ -260,7 +273,7 @@ function SpeechRecognitionComponent() {
     } else {
       console.log('Starting speech recognition...');
     }
-    setResult(null)
+    setResult(null);
     setIsListening(!isListening); // Toggle the listening state
   };
 

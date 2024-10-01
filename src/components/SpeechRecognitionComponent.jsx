@@ -7,7 +7,7 @@ function SpeechRecognitionComponent() {
   const [result, setResult] = useState(null);
   const silenceTimeoutRef = useRef(null); // Ref to hold the silence timeout
   const listenersAdded = useRef(false); // Ref to track if listeners have been added
-
+  
   const calculateString = (stringEquation) => {
     try {
       let formattedString = stringEquation.replace(/𝜋/g, '3.14');
@@ -16,12 +16,16 @@ function SpeechRecognitionComponent() {
         'combinations($1, $2)',
       );
       const result = math.evaluate(formattedString);
-      setResult(result)
+      if(formattedString === ''){
+        setResult(null)
+      }else{
+        setResult(result)
+      }
     } catch (error) {
       setResult('error')
     }
     setEquation('')
-    setIsListening('')
+    setIsListening(false)
   };
 
   const TextStatus = () => {
@@ -93,9 +97,15 @@ function SpeechRecognitionComponent() {
             quatro: '4',
             singko: '5',
             sais: '6',
+            size:'6',
             syete: '7',
             otso: '8',
             nuybi: '9',
+            navy:'9',
+            maybe:'9',
+            noybe:'9',
+            zero: '0',
+            siro:'0',
             dungaga: '+',
             dunga:'+',
             dong:'+',
@@ -105,8 +115,14 @@ function SpeechRecognitionComponent() {
             bawasi: '-',
             padaghani: '*',
             padagan:'*',
+            panag: '*',
+            padagdag:'*',
+            panagini:'*',
             tungaa: '/',
+            tunga:'/',
+            'oo nga':'/',
             abria: '(',
+            abri:'(',
             sirado: ')',
             pie: '𝜋',
             human: ',',
@@ -120,9 +136,17 @@ function SpeechRecognitionComponent() {
             combayni: 'C',
             combining: 'C',
 
-            tangali: 'del',
-            erisa: 'clear',
-            'undangi na': 'end',
+            tangali: '--',
+            tangalin:'--',
+            'ang galing':'--',
+            erisa: '<-',
+            erissa: '<-',
+            'undangi na': '->',
+            'undang ina':'->',
+            'undang in':'->',
+            undang: '->',
+            'unang ina':'->', 
+            'ang dami na':'->',
           },
         };
 
@@ -152,15 +176,15 @@ function SpeechRecognitionComponent() {
         silenceTimeoutRef.current = setTimeout(() => {
           const lastChar = equation.charAt(equation.length - 1);
           // Checks if last char is numeric and new recorded is numeric
-          if (voiceOutput === 'end') {
+          if (voiceOutput === '->') {
             calculateString(equation);
-          } else if (voiceOutput === 'clear' && equation !== '') {
+          } else if (voiceOutput === '<-' && equation !== '') {
             const wordsArray = equation.split(' ');
             const removedLastword = wordsArray
               .slice(0, wordsArray.length - 1)
               .join(' ');
             setEquation(removedLastword);
-          } else if (voiceOutput === 'dell' && equation !== '') {
+          } else if (voiceOutput === '--' && equation !== '') {
             const lettersArray = equation.split('');
             const removedLastLetter = lettersArray
               .slice(0, lettersArray.length - 1)

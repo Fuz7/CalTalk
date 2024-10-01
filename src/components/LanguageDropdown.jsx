@@ -1,14 +1,13 @@
 import dropdownArrow from '@assets/dropdownArrow.svg';
 import { useLayoutEffect, useState } from 'react';
 
-export default function LanguageDropdown() {
-  const [isCollapsed, setCollapsed] = useState(false);
-  const languages = ['English', 'Tagalog', 'Bisaya', 'Japanese'];
+export default function LanguageDropdown({language,setLanguage,availableLanguages}) {
+  const [isCollapsed, setCollapsed] = useState(true);
   const [barHeight, setBarHeight] = useState(66);
 
   useLayoutEffect(() => {
-    setBarHeight(isCollapsed ? 66 : 66 + languages.length * 60);
-  }, [isCollapsed, languages.length]);
+    setBarHeight(isCollapsed ? 66 : 66 + availableLanguages.length * 60);
+  }, [isCollapsed, availableLanguages.length]);
 
   return (
     <div className="relative min-w-[174px] min-h-[66px] bg-transparent">
@@ -20,11 +19,11 @@ export default function LanguageDropdown() {
           select-none ease-out duration-300 z-10`}
         style={{ height: `${barHeight}px` }}
       >
-        {languages.map((language, index) => {
+        {availableLanguages.map((lang, index) => {
           // First language item with toggle functionality
           if (index === 0) {
             return (
-              <div key={'header-' + language}>
+              <div key={'header-' + lang}>
                 <div
                   className={`flex justify-between items-center
                     min-h-[66px] pl-[18px] pr-[15px]`}
@@ -38,18 +37,29 @@ export default function LanguageDropdown() {
                   className="min-w-[174px] min-h-[60px] flex items-center
                     pl-[18px] pr-[15px] border-black border-solid 
                     border-t-[1px] hover:bg-[#f5f5f5]"
+                  onClick={() => {
+                    setLanguage(lang);
+                    setCollapsed(true);
+                  }}
                 >
-                  <p className="font-Righteous text-[24px]">{language}</p>
+                  <p className="font-Righteous text-[24px]">{lang}</p>
                 </div>
               </div>
             );
           } else {
             // Other language items
             return (
-              <div key={'dropdown-' + language} className="min-w-[174px] min-h-[60px] flex items-center
+              <div
+                key={'dropdown-' + lang}
+                className="min-w-[174px] min-h-[60px] flex items-center
                 pl-[18px] pr-[15px] border-black border-solid 
-                border-t-[1px] hover:bg-[#f5f5f5]">
-                <p className="font-Righteous text-[24px]">{language}</p>
+                border-t-[1px] hover:bg-[#f5f5f5]"
+                onClick={() => {
+                  setLanguage(lang);
+                  setCollapsed(true);
+                }}
+              >
+                <p className="font-Righteous text-[24px]">{lang}</p>
               </div>
             );
           }

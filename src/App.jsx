@@ -1,10 +1,12 @@
-import { useState } from "react";
-import InstructionTable from "./components/InstructionTable";
-import LanguageDropdown from "./components/LanguageDropdown";
-import SpeechRecognitionComponent from "./components/SpeechRecognitionComponent";
+import { useState } from 'react';
+import InstructionTable from './components/InstructionTable';
+import LanguageDropdown from './components/LanguageDropdown';
+import SpeechRecognitionComponent from './components/SpeechRecognitionComponent';
 
 function App() {
-  const [isTableShown,setTableShown] = useState(true)
+  const [isTableShown, setTableShown] = useState(true);
+  const [language, setLanguage] = useState('English');
+  const availableLanguages = ['English', 'Tagalog', 'Bisaya', 'Japanese'];
   return (
     <div
       className="min-h-lvh min-w-full bg-[#FFEBCD] flex
@@ -24,15 +26,23 @@ function App() {
           Caltalk
         </h1>
         <div className="flex justify-between">
-          <button className="min-w-[184px] min-h-[70px]
+          <button
+            className="min-w-[184px] min-h-[70px]
           flex items-center justify-center text-white 
           font-Roboto-Black text-[24px] bg-[#664229] 
           rounded-[8px] 
           shadow-[0_4px_4px_0px_rgba(0,0,0,0.34)] "
-          onClick={()=> setTableShown(!isTableShown)}>Instructions</button>
-          <LanguageDropdown />
+            onClick={() => setTableShown(!isTableShown)}
+          >
+            Instructions
+          </button>
+          <LanguageDropdown
+            language={language}
+            setLanguage={setLanguage}
+            availableLanguages={availableLanguages}
+          />
         </div>
-        <InstructionTable isTableShown={isTableShown} />
+        <InstructionTable isTableShown={isTableShown} language={language} />
         <SpeechRecognitionComponent />
       </section>
     </div>

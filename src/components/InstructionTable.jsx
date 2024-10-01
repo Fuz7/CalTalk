@@ -1,4 +1,4 @@
-import instructionImages from '../instructionImages';
+import instructionImages from '../instructionImages.jsx';
 
 export default function InstructionTable({isTableShown}) {
   const imagesArray = instructionImages();
@@ -23,7 +23,7 @@ export default function InstructionTable({isTableShown}) {
       'abriha/abrihi',
       'sirado/sirad-i',
       'pay/pie',
-      'og',
+      'human',
       'isaka',
       'mas dako',
       'mas gamay',],
@@ -32,7 +32,7 @@ export default function InstructionTable({isTableShown}) {
       'gamay o pareha',
       'permutasyon',
       'combayni',
-      'ibta',
+      'tanggali',
       'erisa',
       'undangi na']
     ],

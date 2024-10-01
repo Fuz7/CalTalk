@@ -1,13 +1,41 @@
 import { useEffect, useRef, useState } from 'react';
-import microphone from '@assets/microphone.svg'
+import microphone from '@assets/microphone.svg';
 
-
-function SpeechRecognitionComponent({}){
+function SpeechRecognitionComponent() {
   const recognitionRef = useRef(null); // Ref to hold the SpeechRecognition instance
   const [isListening, setIsListening] = useState(false); // State to track if speech recognition is active
   const [equation, setEquation] = useState(''); // State to hold the equation
+  const [result,setResult] = useState(null)
   const silenceTimeoutRef = useRef(null); // Ref to hold the silence timeout
   const listenersAdded = useRef(false); // Ref to track if listeners have been added
+
+  const TextStatus = ()=>{
+    if(result ===null && equation === '' && isListening === false){
+      return('Start Recording, and it will recognize your speech!')
+    }else if(equation === '' && isListening === true){
+      return(<> Say something
+      <span className='absolute right-[-20px] bottom-0 blinking
+        w-[14px] h-[32px] bg-[#664229] rounded-[1px]'></span>
+        </>
+      )
+    }else if(equation !== '' && isListening === true){
+      return(
+      <>{equation}
+      <span className='absolute right-[-20px] bottom-0 blinking
+        w-[14px] h-[32px] bg-[#664229] rounded-[1px]'></span>
+      
+      </>)
+    }else if(equation !== '' && isListening === false){
+      return(
+      <>({equation}){`->`} Pausing...
+      <span className='absolute right-[-20px] bottom-0 
+        w-[14px] h-[32px] bg-[#664229] rounded-[1px]'></span>
+      
+      </>
+      )
+    }
+    
+  }
 
   useEffect(() => {
     // Check for SpeechRecognition support
@@ -15,36 +43,55 @@ function SpeechRecognitionComponent({}){
       window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (window.SpeechRecognition) {
+      
       const recognition = new window.SpeechRecognition();
       recognitionRef.current = recognition; // Store in ref for access later
       recognition.interimResults = true;
       recognition.maxAlternatives = 1;
 
       const handleResult = (e) => {
-        const dict = {
-          singko: '5',
-          zero: '0',
-          dungaga: '+',
-          dos: '2',
-          'baby boy': 'James Oliver',
-          dongaga: '+',
-          tres: '3',
-          kwatro: '4',
-          quattro: '4',
-          nueve: '9',
-          sais:'6',
-          siete:'7',
-          otso:'8',
-          jis: '10',
-          divide: '/',
-        };
+        const languageDetector = {
+          Bisaya:{
+            uno:'1',
+            dos:'2',
+            tres:'3',
+            kwatro:'4',
+            quatro:'4',
+            singko:'5',
+            sais:'6',
+            syete:'7',
+            otso:'8',
+            nuybi:'9',
+            dungaga:'+',
+            bawasi:'-',
+            padaghani:'*',
+            tungaa:'/',
+            abriha:'(',
+            sirado:')',
+            pie:'𝜋',
+            human:'human',
+            isaka:'^',
+            'mas dako':'>',
+            'mas gamay':'<',
+            'dako o pareha':'>=',
+            'gamay o pareha':'<=',
+            permutasyon:'!',
+            combayni:'C',
+            tangali:'del',
+            erisa:'clear',
+            'undangi na':'end'
 
+
+            
+          }
+        }
+    
         const transcript = Array.from(e.results)
           .map((result) => result[0])
           .map((result) => result.transcript)
           .join(' ');
 
-        const sortedKeys = Object.keys(dict).sort(
+        const sortedKeys = Object.keys(languageDetector['Bisaya']).sort(
           (a, b) => b.length - a.length,
         );
         let bago = transcript;
@@ -52,15 +99,25 @@ function SpeechRecognitionComponent({}){
         // Replace phrases with their corresponding values from the dictionary
         sortedKeys.forEach((key) => {
           const regex = new RegExp(`\\b${key}\\b`, 'g');
-          bago = bago.replace(regex, dict[key]);
+          bago = bago.replace(regex, languageDetector['Bisaya'][key]);
         });
 
         console.log('Value: ' + bago);
-        
+
         // Clear previous timeout and set a new one for silence
         clearTimeout(silenceTimeoutRef.current);
         silenceTimeoutRef.current = setTimeout(() => {
-          setEquation((equation) => equation + bago); // Update the equation state
+          const lastChar = equation.charAt(equation.length - 1)
+          // Checks if last char is numeric and new recorded is numeric 
+
+          if(!isNaN(lastChar) && lastChar !== ' ' && !isNaN(bago)){
+            setEquation((equation) + bago)
+          }else if(isNaN(bago)){
+            setEquation(equation + ' ' + bago)
+          }else if(isNaN(lastChar) &&lastChar !== ' ' && !isNaN(bago)){
+            setEquation(equation + ' ' + bago)
+          }
+         
         }, 800); // 2 seconds of silence
       };
 
@@ -99,7 +156,7 @@ function SpeechRecognitionComponent({}){
     } else {
       console.log('Speech recognition not supported in this browser.');
     }
-  }, [isListening]);
+  }, [isListening,equation]);
 
   const toggleListening = () => {
     const recognition = recognitionRef.current;
@@ -113,35 +170,46 @@ function SpeechRecognitionComponent({}){
   };
 
   return (
-    <div className="self-center flex flex-col mt-[60px]">
-      <h2 onClick={toggleListening}>
-        <div className='bg-[#664229] rounded-[10px] flex 
-        items-center justify-center max-w-[283px] min-h-[60px] 
-        cursor-pointer gap-[10px]'>
-
-        {isListening
-          ?(
+    <div className="self-center flex flex-col mt-[60px] items-center">
+      <h2 className="max-w-[283px]" onClick={toggleListening}>
+        <div
+          className="bg-[#664229] rounded-[10px] flex self-center
+        items-center justify-center max-w-[283px] min-w-[283px]
+         min-h-[60px] 
+        cursor-pointer gap-[10px]"
+        >
+          {isListening ? (
             <>
-            <p className='text-[24px] font-Roboto-Black text-white'>
-              Stop Recording
-            </p>
-            <div className='w-[24px] h-[24px] bg-white border 
-            border-solid border-black ml-[10px]' />
-            </>)
-          : (
+              <p className="text-[24px] font-Roboto-Black text-white">
+                Stop Recording
+              </p>
+              <div
+                className="w-[24px] h-[24px] bg-white border 
+            border-solid border-black ml-[10px]"
+              />
+            </>
+          ) : (
             <>
-            <p className='text-[24px] font-Roboto-Black text-white'>
-              Start Recording
-            </p>
-            <img src={microphone} alt="Mic" />
+              <p className="text-[24px] font-Roboto-Black text-white">
+                Start Recording
+              </p>
+              <img src={microphone} alt="Mic" />
             </>
           )}
-          </div>
+        </div>
       </h2>
-      <p>Start speaking, and it will recognize your speech!</p>
-      <p>Equation: {equation}</p> {/* Display the current equation */}
+      <div
+        className="max-w-[1080px] min-w-[1080px] bg-white rounded-[10px]
+      border-[3px] border-solid border-[#664229] min-h-[80px]
+      self-center mt-[24px] flex justify-center items-center px-[100px] "
+      >
+        <p className="font-Inter text-[24px] text-[#434343]
+        relative">
+          <TextStatus />
+        </p>
+      </div>
     </div>
   );
-};
+}
 
 export default SpeechRecognitionComponent;

@@ -15,7 +15,7 @@ import tungaa from '@mathIcons/tungaa.svg';
 import abriha from '@mathIcons/abriha.svg';
 import sirado from '@mathIcons/sirado.svg';
 import pay from '@mathIcons/pay.svg';
-import og from '@mathIcons/og.svg';
+import human from '@mathIcons/human.svg';
 import isaka from '@mathIcons/isaka.svg';
 import masdako from '@mathIcons/masdako.svg';
 import masgamay from '@mathIcons/masgamay.svg';
@@ -23,7 +23,7 @@ import dakoopareha from '@mathIcons/dakoopareha.svg';
 import gamayopareha from '@mathIcons/gamayopareha.svg';
 import permutasyon from '@mathIcons/permutasyon.svg';
 import combayni from '@mathIcons/combayni.svg';
-import ibta from '@mathIcons/ibta.svg';
+import tanggali from '@mathIcons/tanggali.svg';
 import erisa from '@mathIcons/erisa.svg';
 import undangina from '@mathIcons/undangina.svg';
 
@@ -46,7 +46,7 @@ export default function instructionImages() {
     abriha,
     sirado,
     pay,
-    og,
+    human,
     isaka,
     masdako,
     masgamay,
@@ -54,7 +54,7 @@ export default function instructionImages() {
     gamayopareha,
     permutasyon,
     combayni,
-    ibta,
+    tanggali,
     erisa,
     undangina,
   ];

@@ -8,7 +8,8 @@ export default defineConfig({
     alias: {
       '@mathIcons': '/src/assets/mathIcons', // Create an alias for your images directory
       '@decorations': '/src/assets/decorations', // Create an alias for your fonts directory
-      '@assets': '/src/assets'
+      '@assets': '/src/assets',
+      '@fonts': '/src/assets/fonts'
     },
   },
 })

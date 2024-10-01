@@ -5,7 +5,15 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily:{
+        Belanosima:['Belanosima'],
+        ComingSoon:['ComingSoon'],
+        Inter:['Inter'],
+        Righteous:['Righteous'],
+        'Roboto-Black':['Roboto'],
+        }
+    },
   },
   plugins: [],
 }

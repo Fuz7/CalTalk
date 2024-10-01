@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import microphone from '@assets/microphone.svg';
-
+import * as math from 'mathjs';
 function SpeechRecognitionComponent() {
   const [isListening, setIsListening] = useState(false); // State to track if speech recognition is active
   const [equation, setEquation] = useState(''); // State to hold the equation
@@ -9,13 +9,28 @@ function SpeechRecognitionComponent() {
   const listenersAdded = useRef(false); // Ref to track if listeners have been added
 
   const calculateString = (stringEquation) => {
-      
-  }
+    try {
+      let formattedString = stringEquation.replace(/𝜋/g, '3.14');
+      formattedString = formattedString.replace(
+        /C\((\d+),\s*(\d+)\)/g,
+        'combinations($1, $2)',
+      );
+      const result = math.evaluate(formattedString);
+      setResult(result)
+    } catch (error) {
+      setResult('error')
+    }
+    setEquation('')
+    setIsListening('')
+  };
 
   const TextStatus = () => {
-    if (result === null && equation === '' && isListening === false) {
+    if(result === 'error'){
+      return 'Mali ang imohang pagsulat, usabi'
+    } else if (result === null && equation === '' && isListening === false) {
       return 'Start Recording, and it will recognize your speech!';
-    } else if (equation === '' && isListening === true) {
+    }  
+    else if (equation === '' && isListening === true) {
       return (
         <>
           {' '}
@@ -26,26 +41,35 @@ function SpeechRecognitionComponent() {
           ></span>
         </>
       );
-    } else if (equation !== '' && isListening === true) {
+    } 
+    else if (equation !== '' && isListening === true) {
       return (
         <>
           {equation}
           <span
             className="absolute right-[-20px] bottom-0 blinking
-        w-[14px] h-[32px] bg-[#664229] rounded-[1px]"
-          ></span>
+            w-[14px] h-[32px] bg-[#664229] rounded-[1px]"
+            ></span>
         </>
       );
-    } else if (equation !== '' && isListening === false) {
+    } 
+    else if (equation !== '' && isListening === false) {
       return (
         <>
           ({equation}){`->`} Pausing...
           <span
             className="absolute right-[-20px] bottom-0 
-        w-[14px] h-[32px] bg-[#664229] rounded-[1px]"
-          ></span>
+            w-[14px] h-[32px] bg-[#664229] rounded-[1px]"
+            ></span>
         </>
       );
+    }
+    else if(!isNaN(result) && result !== false){
+      return 'Output: ' + result
+    }else if(result === true){
+      return 'Tinuod jud na dol'
+    }else if(result === false){
+      return 'Pataka raman ka dol'
     }
   };
 
@@ -73,20 +97,29 @@ function SpeechRecognitionComponent() {
             otso: '8',
             nuybi: '9',
             dungaga: '+',
+            dunga:'+',
+            dong:'+',
+            dongga:'+',
+            dung:'+',
+            umaga:'+',
             bawasi: '-',
             padaghani: '*',
+            padagan:'*',
             tungaa: '/',
-            abriha: '(',
+            abria: '(',
             sirado: ')',
             pie: '𝜋',
-            human: 'human',
+            human: ',',
             isaka: '^',
             'mas dako': '>',
             'mas gamay': '<',
             'dako o pareha': '>=',
             'gamay o pareha': '<=',
             permutasyon: '!',
+            permutation:'!',
             combayni: 'C',
+            combining: 'C',
+
             tangali: 'del',
             erisa: 'clear',
             'undangi na': 'end',
@@ -106,7 +139,10 @@ function SpeechRecognitionComponent() {
         // Replace phrases with their corresponding values from the dictionary
         sortedKeys.forEach((key) => {
           const regex = new RegExp(`\\b${key}\\b`, 'g');
-          voiceOutput = voiceOutput.replace(regex, languageDetector['Bisaya'][key]);
+          voiceOutput = voiceOutput.replace(
+            regex,
+            languageDetector['Bisaya'][key],
+          );
         });
 
         console.log('Value: ' + voiceOutput);
@@ -116,10 +152,9 @@ function SpeechRecognitionComponent() {
         silenceTimeoutRef.current = setTimeout(() => {
           const lastChar = equation.charAt(equation.length - 1);
           // Checks if last char is numeric and new recorded is numeric
-          if(voiceOutput ==='end'){
-            calculateString(equation)
-          }
-          else if (voiceOutput === 'clear' && equation !== '') {
+          if (voiceOutput === 'end') {
+            calculateString(equation);
+          } else if (voiceOutput === 'clear' && equation !== '') {
             const wordsArray = equation.split(' ');
             const removedLastword = wordsArray
               .slice(0, wordsArray.length - 1)
@@ -131,11 +166,27 @@ function SpeechRecognitionComponent() {
               .slice(0, lettersArray.length - 1)
               .join('');
             setEquation(removedLastLetter);
-          } else if (!isNaN(lastChar) && lastChar !== ' ' && !isNaN(voiceOutput)) {
+          } else if (
+            (!isNaN(lastChar) ||
+              lastChar === 'C' ||
+              lastChar === '(' ||
+              lastChar == ',') &&
+            lastChar !== ' ' &&
+            (!isNaN(voiceOutput) ||
+              voiceOutput === '(' ||
+              voiceOutput === ',' ||
+              voiceOutput === ')'||
+              voiceOutput === '^'||
+              voiceOutput === '!')
+          ) {
             setEquation(equation + voiceOutput);
           } else if (isNaN(voiceOutput)) {
             setEquation(equation + ' ' + voiceOutput);
-          } else if (isNaN(lastChar) && lastChar !== ' ' && !isNaN(voiceOutput)) {
+          } else if (
+            isNaN(lastChar) &&
+            lastChar !== ' ' &&
+            !isNaN(voiceOutput)
+          ) {
             setEquation(equation + ' ' + voiceOutput);
           }
         }, 800); // 2 seconds of silence
@@ -185,6 +236,7 @@ function SpeechRecognitionComponent() {
     } else {
       console.log('Starting speech recognition...');
     }
+    setResult(null)
     setIsListening(!isListening); // Toggle the listening state
   };
 
@@ -223,7 +275,7 @@ function SpeechRecognitionComponent() {
       self-center mt-[24px] flex justify-center items-center px-[100px] "
       >
         <p
-          className="font-Inter text-[24px] text-[#434343]
+          className="font-Inter text-[24px] text-[#000000]
         relative"
         >
           <TextStatus />

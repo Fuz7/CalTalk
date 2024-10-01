@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 const SpeechRecognitionComponent = () => {
   const recognitionRef = useRef(null); // Ref to hold the SpeechRecognition instance
   const [isListening, setIsListening] = useState(false); // State to track if speech recognition is active
-
+  
   useEffect(() => {
     window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 

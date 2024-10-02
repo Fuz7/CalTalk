@@ -113,6 +113,11 @@ function SpeechRecognitionComponent({ language }) {
           voiceOutput = voiceOutput.replace(regex, activeLanguage[key]);
         });
 
+        const isNumeric = /^[\d\s]+$/.test(voiceOutput);
+        if(isNumeric){
+          voiceOutput = voiceOutput.replace(/\s+/g,'')
+        }
+        
         console.log('Value: ' + voiceOutput);
 
         // Clear previous timeout and set a new one for silence

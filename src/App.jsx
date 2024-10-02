@@ -44,7 +44,7 @@ function App() {
           />
         </div>
         <InstructionTable isTableShown={isTableShown} language={language} />
-        <SpeechRecognitionComponent />
+        <SpeechRecognitionComponent language={language} />
         <Decorations />
       </section>
     </div>

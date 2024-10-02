@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import microphone from '@assets/microphone.svg';
 import * as math from 'mathjs';
-function SpeechRecognitionComponent() {
+import languageDetector from '../languageDetector';
+
+function SpeechRecognitionComponent({ language }) {
   const [isListening, setIsListening] = useState(false); // State to track if speech recognition is active
   const [equation, setEquation] = useState(''); // State to hold the equation
   const [result, setResult] = useState(null);
@@ -16,7 +18,12 @@ function SpeechRecognitionComponent() {
         'combinations($1, $2)',
       );
       let result = math.evaluate(formattedString);
-      if (!isNaN(result) && !Number.isInteger(result)) {
+      if (
+        !isNaN(result) &&
+        !Number.isInteger(result) &&
+        result !== false &&
+        result !== true
+      ) {
         result = parseFloat(result).toFixed(3);
       }
       if (formattedString === '') {
@@ -36,7 +43,7 @@ function SpeechRecognitionComponent() {
       return 'Mali ang imohang pagsulat, usabi';
     } else if (result === null && equation === '' && isListening === false) {
       return 'Start Recording, and it will recognize your speech!';
-    } else if (equation === '' && isListening === true) {
+    } else if (result === null && equation === '' && isListening === true) {
       return (
         <>
           {' '}
@@ -47,7 +54,7 @@ function SpeechRecognitionComponent() {
           ></span>
         </>
       );
-    } else if (equation !== '' && isListening === true) {
+    } else if (result === null && equation !== '' && isListening === true) {
       return (
         <>
           {equation}
@@ -57,7 +64,7 @@ function SpeechRecognitionComponent() {
           ></span>
         </>
       );
-    } else if (equation !== '' && isListening === false) {
+    } else if (result === null && equation !== '' && isListening === false) {
       return (
         <>
           ({equation}){`->`} Pausing...
@@ -67,7 +74,7 @@ function SpeechRecognitionComponent() {
           ></span>
         </>
       );
-    } else if (!isNaN(result) && result !== false) {
+    } else if (!isNaN(result) && result !== false && result !== true) {
       return 'Output: ' + result;
     } else if (result === true) {
       return 'Tinuod jud na dol';
@@ -87,83 +94,15 @@ function SpeechRecognitionComponent() {
       recognition.maxAlternatives = 1;
 
       const handleResult = (e) => {
-        const languageDetector = {
-          Bisaya: {
-            uno: '1',
-            dos: '2',
-            tres: '3',
-            dress:'3',
-            kwatro: '4',
-            quatro: '4',
-            singko: '5',
-            sais: '6',
-            size: '6',
-            syete: '7',
-            otso: '8',
-            nuybi: '9',
-            navy: '9',
-            maybe: '9',
-            noybe: '9',
-            zero: '0',
-            siro: '0',
-            dungaga: '+',
-            dunga: '+',
-            dumaga:'+',
-            dong: '+',
-            dongga: '+',
-            dung: '+',
-            umaga: '+',
-            bawasi: '-',
-            padaghani: '*',
-            padagan: '*',
-            panag: '*',
-            panagan: '*',
-            padagdag: '*',
-            panagini: '*',
-            tungaa: '/',
-            tunga: '/',
-            bayani: '/',
-            mainit: '/',
-            'oo nga': '/',
-            abria: '(',
-            abri: '(',
-            sirado: ')',
-            pie: '𝜋',
-            human: ',',
-            isaka: '^',
-            'mas dako': '>',
-            'mas gamay': '<',
-            'dako o pareha': '>=',
-            'gamay o pareha': '<=',
-            permutasyon: '!',
-            permutation: '!',
-            combayni: 'C',
-            combining: 'C',
+        const languages = languageDetector();
 
-            tangali: '--',
-            tangalin: '--',
-            tanghali: '--',
-            'ang galing': '--',
-            erisa: '<-',
-            erissa: '<-',
-            elisa: '<-',
-            irisa:'<-',
-            'it is a': '<-',
-            'undangi na': '->',
-            'undang ina': '->',
-            'undang in': '->',
-            undang: '->',
-            'unang ina': '->',
-            'ang dami na': '->',
-          },
-        };
-
+        const activeLanguage = languages[language];
         const transcript = Array.from(e.results)
           .map((result) => result[0])
           .map((result) => result.transcript)
           .join(' ');
 
-        const sortedKeys = Object.keys(languageDetector['Bisaya']).sort(
+        const sortedKeys = Object.keys(activeLanguage).sort(
           (a, b) => b.length - a.length,
         );
         let voiceOutput = transcript;
@@ -171,10 +110,7 @@ function SpeechRecognitionComponent() {
         // Replace phrases with their corresponding values from the dictionary
         sortedKeys.forEach((key) => {
           const regex = new RegExp(`\\b${key}\\b`, 'g');
-          voiceOutput = voiceOutput.replace(
-            regex,
-            languageDetector['Bisaya'][key],
-          );
+          voiceOutput = voiceOutput.replace(regex, activeLanguage[key]);
         });
 
         console.log('Value: ' + voiceOutput);
@@ -190,7 +126,7 @@ function SpeechRecognitionComponent() {
             equation === '' &&
             (voiceOutput === '<-' || voiceOutput === '--')
           ) {
-            return
+            return;
           } else if (voiceOutput === '<-' && equation !== '') {
             const wordsArray = equation.split(' ');
             const removedLastword = wordsArray
@@ -207,6 +143,7 @@ function SpeechRecognitionComponent() {
             (!isNaN(lastChar) ||
               lastChar === 'C' ||
               lastChar === '(' ||
+              lastChar === '^' ||
               lastChar == ',') &&
             lastChar !== ' ' &&
             (!isNaN(voiceOutput) ||
@@ -264,7 +201,7 @@ function SpeechRecognitionComponent() {
     } else {
       console.log('Speech recognition not supported in this browser.');
     }
-  }, [isListening, equation]);
+  }, [isListening, equation, language]);
 
   const toggleListening = () => {
     if (isListening) {

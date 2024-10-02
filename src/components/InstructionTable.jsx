@@ -55,6 +55,50 @@ export default function InstructionTable({ isTableShown, language }) {
         'undangi na',
       ],
     ],
+    Tagalog: [
+      ['isa', 'dalawa', 'tatlo', 'apat', 'lima', 'anim', 'pito'],
+      ['walo', 'siyam', 'wala', 'dagdagan', 'bawasan', 'paramihin', 'hatiin'],
+      [
+        'buksan',
+        'sarado',
+        'pie',
+        'kama',
+        'itaas',
+        'mas malaki',
+        'mas maliit',
+      ],
+      [
+        'malaki o pareha',
+        'maliit o pareha',
+        'permutasyon',
+        'kombinasyon',
+        'tanggalin',
+        'burahin',
+        'okay nayan',
+      ],
+    ],
+    Japanese: [
+      ['ichi', 'ni', 'three', 'four', 'five', 'six', 'seven'],
+      ['eight', 'nine', 'zero', 'plus', 'minus', 'times', 'divide'],
+      [
+        'open',
+        'close',
+        'pie',
+        'comma',
+        'exponent',
+        'greater than',
+        'less than',
+      ],
+      [
+        'greater or equal',
+        'less or equal',
+        'permutation',
+        'combination',
+        'delete',
+        'clear',
+        'return',
+      ],
+    ],
   };
   return (
     <section

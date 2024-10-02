@@ -108,6 +108,42 @@ export default function languageDetector() {
       'unang ina': '->',
       'ang dami na': '->',
     },
+    Tagalog:{
+      isa:'1',
+      dalawa:'2',
+      tatlo:'3',
+      apat:'4',
+      lima:'5',
+      anim:'6',
+      pito:'7',
+      walo:'8',
+      siyam:'9',
+      siam:'9',
+      wala:'0',
+      dagdagan:'+',
+      bawasan:'-',
+      paramihin:'*',
+      hatiin:'/',
+      buksan:'(',
+      sarado:')',
+      pie: '𝜋',
+      kama:',',
+      itaas:'^',
+      'mas malaki':'>',
+      'maliit':'<',
+      'mas maliit':'<',
+      'malaki o pareha':'>=',
+      'maliit o pareha':'<=',
+      permutasyon:'!',
+      kombinasyon:'C',
+      tanggalin: '--',
+      burahin:'<-',
+      buray:'<-',
+      'okay na yan':'->',
+      okay:'->',
+      'okay na' :'->'
+      
+    }
   };
   return languageDetector;
 }

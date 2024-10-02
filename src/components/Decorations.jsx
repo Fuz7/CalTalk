@@ -8,7 +8,7 @@ export default function Decorations() {
     <>
       <img
         className="absolute max-w-[161px] max-h-[218px]
-        left-[10px] top-[782px]"
+        left-[10px] top-[809px]"
         src={leftPot}
         alt=""
       />
@@ -30,6 +30,8 @@ export default function Decorations() {
         src={wildlife}
         alt=""
       />
+      <div className='absolute top-[1000px]
+      min-h-[2px] min-w-[1440px] bg-black'></div>
     </>
   );
 }

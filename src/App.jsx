@@ -6,6 +6,7 @@ import Decorations from './components/Decorations';
 function App() {
   
   const [isTableShown, setTableShown] = useState(true);
+  const [easterEggShown, setEasterEggShown] = useState(true)
   const [language, setLanguage] = useState('English');
   const availableLanguages = ['English', 'Tagalog', 'Bisaya', 'Japanese'];
   return (
@@ -45,7 +46,7 @@ function App() {
         </div>
         <InstructionTable isTableShown={isTableShown} language={language} />
         <SpeechRecognitionComponent language={language} />
-        <Decorations />
+        <Decorations easterEggShown={easterEggShown} />
       </section>
     </div>
   );

@@ -2,8 +2,9 @@ import leftPot from '@decorations/leftPot.svg';
 import rightPot from '@decorations/rightPot.svg';
 import frame from '@decorations/frame.svg';
 import wildlife from '@decorations/wildlife.svg';
+import sirBart from '@decorations/sirBart.png'
+export default function Decorations({easterEggShown}) {
 
-export default function Decorations() {
   return (
     <>
       <img
@@ -28,6 +29,18 @@ export default function Decorations() {
         className="absolute max-w-[175px] max-h-[175px]
         left-[0px] top-[339px]"
         src={wildlife}
+        alt=""
+      />
+      <p
+        className="absolute 
+        left-[523px] top-[224px] font-Belanosima text-[40px]"
+      
+      >Do You Mean <span className='inline text-[#FF27DF]'>This Guy?</span>
+      </p>
+      <img
+        className="absolute 
+        left-[593px] top-[316px]"
+        src={sirBart}
         alt=""
       />
       <div className='absolute top-[1000px]

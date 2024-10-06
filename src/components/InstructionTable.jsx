@@ -26,10 +26,10 @@ export default function InstructionTable({ isTableShown, language }) {
       ],
     ],
     Bisaya: [
-      ['uno', 'dos', 'tres', 'kwatro', 'singko', 'sais', 'syete'],
+      ['isa', 'duha', 'tulo', 'upat', 'lima', 'unom', 'pito'],
       [
-        'otso',
-        'nuybi',
+        'walo',
+        'siyam',
         'siro',
         'dungaga',
         'bawasi',

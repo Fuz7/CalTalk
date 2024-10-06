@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import microphone from '@assets/microphone.svg';
 import * as math from 'mathjs';
 import languageDetector from '../languageDetector';
-
+import languageMessages from '../languageMessages';
 function SpeechRecognitionComponent({ language }) {
+
+  const languageMessage = languageMessages()
   const [isListening, setIsListening] = useState(false); // State to track if speech recognition is active
   const [equation, setEquation] = useState(''); // State to hold the equation
   const [result, setResult] = useState(null);
@@ -40,17 +42,17 @@ function SpeechRecognitionComponent({ language }) {
 
   const TextStatus = () => {
     if (result === 'error') {
-      return 'Mali ang imohang pagsulat, usabi';
+      return languageMessage['wrongInput'][language];
     } else if (result === null && equation === '' && isListening === false) {
-      return 'Start Recording, and it will recognize your speech!';
+      return languageMessage['start'][language];
     } else if (result === null && equation === '' && isListening === true) {
       return (
         <>
           {' '}
-          Say something
+          {languageMessage['emptyOutput'][language]}
           <span
             className="absolute right-[-20px] bottom-0 blinking
-        w-[14px] h-[32px] bg-[#664229] rounded-[1px]"
+        w-[14px] h-[32px] bg-[#664229] rounded-[1pox]"
           ></span>
         </>
       );
@@ -75,11 +77,11 @@ function SpeechRecognitionComponent({ language }) {
         </>
       );
     } else if (!isNaN(result) && result !== false && result !== true) {
-      return 'Output: ' + result;
+      return languageMessage['output'][language] + result;
     } else if (result === true) {
-      return 'Tinuod jud na dol';
+      return languageMessage['correct'][language];
     } else if (result === false) {
-      return 'Pataka raman ka dol';
+      return languageMessage['incorrect'][language];
     }
   };
 

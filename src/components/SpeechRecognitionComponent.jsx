@@ -135,17 +135,13 @@ function SpeechRecognitionComponent({ language }) {
           ) {
             return;
           } else if (voiceOutput === '<-' && equation !== '') {
+            setEquation('')
+          } else if (voiceOutput === '--' && equation !== '') {
             const wordsArray = equation.split(' ');
             const removedLastword = wordsArray
               .slice(0, wordsArray.length - 1)
               .join(' ');
             setEquation(removedLastword);
-          } else if (voiceOutput === '--' && equation !== '') {
-            const lettersArray = equation.split('');
-            const removedLastLetter = lettersArray
-              .slice(0, lettersArray.length - 1)
-              .join('');
-            setEquation(removedLastLetter);
           } else if (
             (!isNaN(lastChar) ||
               lastChar === 'C' ||

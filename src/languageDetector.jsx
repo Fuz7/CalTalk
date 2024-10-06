@@ -94,10 +94,11 @@ export default function languageDetector() {
       permutation: '!',
       combayni: 'C',
       combining: 'C',
-
+      tangal: '--',
       tangali: '--',
       tangalin: '--',
       tanghali: '--',
+      'ang gali': '--',
       'ang galing': '--',
       erisa: '<-',
       erissa: '<-',

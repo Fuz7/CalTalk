@@ -113,6 +113,9 @@ export default function languageDetector() {
       undang: '->',
       'unang ina': '->',
       'ang dami na': '->',
+      'sir bart': '||',
+      'server': '||',
+      'kana': '|'
     },
     Tagalog:{
       isa:'1',

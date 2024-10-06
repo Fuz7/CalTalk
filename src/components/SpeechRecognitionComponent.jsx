@@ -3,7 +3,7 @@ import microphone from '@assets/microphone.svg';
 import * as math from 'mathjs';
 import languageDetector from '../languageDetector';
 import languageMessages from '../languageMessages';
-function SpeechRecognitionComponent({ language }) {
+function SpeechRecognitionComponent({ language,setEasterEggShown,setTableShown }) {
 
   const languageMessage = languageMessages()
   const [isListening, setIsListening] = useState(false); // State to track if speech recognition is active
@@ -129,7 +129,13 @@ function SpeechRecognitionComponent({ language }) {
           // Checks if last char is numeric and new recorded is numeric
           if (voiceOutput === '->') {
             calculateString(equation);
-          } else if (
+          }else if(voiceOutput === '||'){
+            setTableShown(false)
+            setEasterEggShown(true)
+          }else if(voiceOutput ==='|'){
+            setEasterEggShown(false)
+          }
+          else if (
             equation === '' &&
             (voiceOutput === '<-' || voiceOutput === '--')
           ) {
@@ -204,7 +210,7 @@ function SpeechRecognitionComponent({ language }) {
     } else {
       console.log('Speech recognition not supported in this browser.');
     }
-  }, [isListening, equation, language]);
+  }, [isListening, equation, language,setEasterEggShown,setTableShown]);
 
   const toggleListening = () => {
     if (isListening) {

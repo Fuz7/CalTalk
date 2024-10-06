@@ -103,7 +103,7 @@ export default function InstructionTable({ isTableShown, language }) {
   return (
     <section
       className={`min-w-[1080px] max-w-[1080px]
-  self-center rounded-[10px] mt-[30px]
+  self-center rounded-[10px] mt-[30px] z-10
    min-h-[460px] bg-white pt-[35px] px-[20px]
   border-[3px] border-solid border-[#664229]
   origin-top-left transition-[transform opacity]

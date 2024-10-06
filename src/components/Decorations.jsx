@@ -3,8 +3,26 @@ import rightPot from '@decorations/rightPot.svg';
 import frame from '@decorations/frame.svg';
 import wildlife from '@decorations/wildlife.svg';
 import sirBart from '@decorations/sirBart.png'
-export default function Decorations({easterEggShown}) {
+import { gsap } from "gsap";
+    
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect } from 'react';
 
+
+gsap.registerPlugin(ScrollTrigger);
+export default function Decorations({easterEggShown}) {
+  useEffect(()=>{
+    if(easterEggShown){
+      const tl = gsap.timeline({delay:1})
+      tl.to('.first',{opacity:1,duration:1 })
+      tl.to('.second',{opacity:1,duration:1})
+      tl.to('.third',{opacity:1,duration:1,})
+    }else if(easterEggShown === false){
+      gsap.to('.first',{opacity:0,duration:0.25})
+      gsap.to('.second',{opacity:0,duration:0.25})
+      gsap.to('.third',{opacity:0,duration:0.25 })
+    }
+  },[easterEggShown])
   return (
     <>
       <img
@@ -32,14 +50,15 @@ export default function Decorations({easterEggShown}) {
         alt=""
       />
       <p
-        className="absolute 
+        className="absolute  first opacity-0 first
         left-[523px] top-[224px] font-Belanosima text-[40px]"
       
-      >Do You Mean <span className='inline text-[#FF27DF]'>This Guy?</span>
+      >Do You Mean <span className='inline text-[#FF27DF] second
+       opacity-0'>This Guy?</span>
       </p>
       <img
-        className="absolute 
-        left-[593px] top-[316px]"
+        className="absolute opacity-0 rounded-sm
+        left-[603px] top-[316px] third"
         src={sirBart}
         alt=""
       />

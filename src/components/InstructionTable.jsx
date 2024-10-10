@@ -91,7 +91,7 @@ export default function InstructionTable({ isTableShown, language }) {
       ],
       [
         'soreijō ka hitoshī',
-        'sore ika ka hitoshī',
+        'sore ka hitoshī',
         'junretsu',
         'kumiawase',
         'kesu',
